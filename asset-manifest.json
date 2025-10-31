@@ -1,13 +1,13 @@
 {
   "files": {
-    "main.css": "/tacos-novoa/static/css/main.652cd9c1.css",
-    "main.js": "/tacos-novoa/static/js/main.fbc98ec9.js",
+    "main.css": "/tacos-novoa/static/css/main.a8ca2d4e.css",
+    "main.js": "/tacos-novoa/static/js/main.fc04e136.js",
     "index.html": "/tacos-novoa/index.html",
-    "main.652cd9c1.css.map": "/tacos-novoa/static/css/main.652cd9c1.css.map",
-    "main.fbc98ec9.js.map": "/tacos-novoa/static/js/main.fbc98ec9.js.map"
+    "main.a8ca2d4e.css.map": "/tacos-novoa/static/css/main.a8ca2d4e.css.map",
+    "main.fc04e136.js.map": "/tacos-novoa/static/js/main.fc04e136.js.map"
   },
   "entrypoints": [
-    "static/css/main.652cd9c1.css",
-    "static/js/main.fbc98ec9.js"
+    "static/css/main.a8ca2d4e.css",
+    "static/js/main.fc04e136.js"
   ]
 }
