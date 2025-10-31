@@ -1,13 +1,12 @@
 import React, { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-// Se ha añadido ShoppingCart a la lista de importaciones para solucionar el error
-import { X, Clock, CreditCard, DollarSign, Copy, CheckCircle, MessageCircle, MapPin, Truck, Home, ShoppingCart } from 'lucide-react';
+import { X, Clock, CreditCard, DollarSign, Copy, CheckCircle, MessageCircle, MapPin, Truck, Home, ShoppingCart, Locate } from 'lucide-react'; // Añadido 'Locate' para el ícono de dirección
 
 // MODIFICACIÓN CRUCIAL: La lista de sucursales ahora incluye el número de WhatsApp
 const SUCURSALES = [
-  { name: 'Sucursal Centro (Calle Principal 123)', whatsapp: '8441000111' },
-  //{ name: 'Sucursal Norte (Av. Tecnológico 456)', whatsapp: '8441000222' },
-  //{ name: 'Sucursal Sur (Blvd. Fundadores 789)', whatsapp: '8441000333' },
+  { name: 'Sucursal Centro (Calle Principal 123)', whatsapp: '8445349337' },
+  { name: 'Sucursal Norte (Av. Tecnológico 456)', whatsapp: '8441000222' },
+  { name: 'Sucursal Sur (Blvd. Fundadores 789)', whatsapp: '8441000333' },
 ];
 
 // Componente simple de mensaje (reemplaza alert)
@@ -42,14 +41,15 @@ const OrderModal = ({ isOpen, onClose, cartItems = [], totalPrice = 0 }) => {
   const [paymentMethod, setPaymentMethod] = useState('transfer');
   const [copied, setCopied] = useState(false);
   const [customerName, setCustomerName] = useState('');
-  // NUEVOS ESTADOS para el tipo de servicio y la sucursal
-  // Se inicializa con el nombre de la primera sucursal
+  
   const [orderType, setOrderType] = useState('takeout'); // 'dine-in', 'takeout', 'delivery'
   const [selectedSucursalName, setSelectedSucursalName] = useState(SUCURSALES[0].name);
+  // ESTADO PARA LA DIRECCIÓN DE ENVÍO
+  const [deliveryAddress, setDeliveryAddress] = useState(''); 
+  
   const [message, setMessage] = useState(null); // Para mostrar mensajes (reemplaza alert)
 
   const bankAccount = '1234-5678-9012-3456';
-  // Eliminamos whatsappNumber global ya que ahora está en SUCURSALES
 
   // Función para copiar al portapapeles
   const copyToClipboard = (text) => {
@@ -82,6 +82,12 @@ const OrderModal = ({ isOpen, onClose, cartItems = [], totalPrice = 0 }) => {
       setMessage({ text: 'Por favor selecciona una sucursal.', type: 'error' });
       return;
     }
+    
+    // NUEVA VERIFICACIÓN: Si es a domicilio, verificar la dirección
+    if (orderType === 'delivery' && !deliveryAddress.trim()) {
+        setMessage({ text: 'Por favor ingresa la dirección de envío.', type: 'error' });
+        return;
+    }
 
     // OBTENER EL NÚMERO DE WHATSAPP BASADO EN LA SUCURSAL SELECCIONADA
     const selectedSucursal = SUCURSALES.find(s => s.name === selectedSucursalName);
@@ -105,7 +111,10 @@ const OrderModal = ({ isOpen, onClose, cartItems = [], totalPrice = 0 }) => {
     } else if (orderType === 'takeout') {
       orderLocation = `Tipo de servicio: Para Llevar%0ASucursal de Recolección: ${selectedSucursalName}`;
     } else { // delivery
-      orderLocation = `Tipo de servicio: A Domicilio%0A*Nota: La dirección debe ser acordada con el restaurante.*%0ASucursal de Envío: ${selectedSucursalName}`;
+      orderLocation = 
+        `Tipo de servicio: A Domicilio%0A` + 
+        `*Dirección de Envío: ${deliveryAddress}*%0A` + // Usamos la dirección
+        `Sucursal de Envío: ${selectedSucursalName}`;
     }
     
     const message = `¡Hola! Quiero confirmar mi pedido:%0A%0A` +
@@ -125,7 +134,6 @@ const OrderModal = ({ isOpen, onClose, cartItems = [], totalPrice = 0 }) => {
       {message && <MessageDisplay message={message.text} type={message.type} onClose={() => setMessage(null)} />}
       {isOpen && (
         <motion.div
-          // MODIFICADO: Usamos 'items-start' en lugar de 'items-center' y añadimos 'pt-16' para empujar el modal hacia abajo.
           className="fixed inset-0 bg-black/60 backdrop-blur-sm flex items-start justify-center z-50 p-4 pt-16"
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
@@ -181,7 +189,7 @@ const OrderModal = ({ isOpen, onClose, cartItems = [], totalPrice = 0 }) => {
                       Horario de Servicio
                     </h4>
                     <p className="text-red-700 text-sm">
-                      Lunes a Jueves: <strong>7pm - 1:10 am</strong> <p></p> Sabado a Domingo: <strong>7:00pm - 3:10am</strong>
+                      Estamos listos para atenderte de <strong>9am - 4pm</strong>
                     </p>
                   </div>
                 </div>
@@ -215,6 +223,30 @@ const OrderModal = ({ isOpen, onClose, cartItems = [], totalPrice = 0 }) => {
                   ))}
                 </div>
               </motion.div>
+
+              {/* CAMPO DE DIRECCIÓN (Solo si es A Domicilio) */}
+              {orderType === 'delivery' && (
+                <motion.div
+                  initial={{ opacity: 0, height: 0 }}
+                  animate={{ opacity: 1, height: 'auto' }}
+                  exit={{ opacity: 0, height: 0 }}
+                  transition={{ duration: 0.3 }}
+                >
+                  <label className="block mb-2 font-semibold text-gray-900">Dirección de Envío:</label>
+                  <div className="relative">
+                    {/* El ícono ya no se puede posicionar con textarea tan fácilmente, lo dejaremos como elemento decorativo/guía */}
+                    <Locate className="w-5 h-5 text-gray-400 absolute top-4 left-3" />
+                    <textarea // CAMBIADO DE input A TEXTAREA
+                      rows="3" // Aumentamos las filas para que parezca una barra de texto grande
+                      value={deliveryAddress}
+                      onChange={(e) => setDeliveryAddress(e.target.value)}
+                      placeholder="Calle, número, colonia, referencias (entrega en 3er piso, puerta roja, etc.)"
+                      className="w-full pl-10 pr-4 py-3 border border-gray-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-[#D32F2F] resize-none" // resize-none para evitar que el usuario lo deforme
+                    ></textarea>
+                  </div>
+                </motion.div>
+              )}
+
 
               {/* SELECCIÓN DE SUCURSAL (Solo si no es Comer Aquí) */}
               {orderType !== 'dine-in' && (
