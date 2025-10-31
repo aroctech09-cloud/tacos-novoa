@@ -1,0 +1,13 @@
+{
+  "files": {
+    "main.css": "/tacos-novoa/static/css/main.652cd9c1.css",
+    "main.js": "/tacos-novoa/static/js/main.631cf36a.js",
+    "index.html": "/tacos-novoa/index.html",
+    "main.652cd9c1.css.map": "/tacos-novoa/static/css/main.652cd9c1.css.map",
+    "main.631cf36a.js.map": "/tacos-novoa/static/js/main.631cf36a.js.map"
+  },
+  "entrypoints": [
+    "static/css/main.652cd9c1.css",
+    "static/js/main.631cf36a.js"
+  ]
+}
