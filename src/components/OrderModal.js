@@ -6,8 +6,8 @@ import { X, Clock, CreditCard, DollarSign, Copy, CheckCircle, MessageCircle, Map
 // MODIFICACIÓN CRUCIAL: La lista de sucursales ahora incluye el número de WhatsApp
 const SUCURSALES = [
   { name: 'Sucursal Centro (Calle Principal 123)', whatsapp: '8441000111' },
-  { name: 'Sucursal Norte (Av. Tecnológico 456)', whatsapp: '8441000222' },
-  { name: 'Sucursal Sur (Blvd. Fundadores 789)', whatsapp: '8441000333' },
+  //{ name: 'Sucursal Norte (Av. Tecnológico 456)', whatsapp: '8441000222' },
+  //{ name: 'Sucursal Sur (Blvd. Fundadores 789)', whatsapp: '8441000333' },
 ];
 
 // Componente simple de mensaje (reemplaza alert)
